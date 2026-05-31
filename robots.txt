@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://roosterink-stl.netlify.app/sitemap.xml
