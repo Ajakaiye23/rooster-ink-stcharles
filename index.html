@@ -596,6 +596,20 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener
   var rimLight=new THREE.DirectionalLight(0xE63946,0.6);
   rimLight.position.set(-6,4,-8);
   scene.add(rimLight);
+  if('outputColorSpace' in renderer){renderer.outputColorSpace=THREE.SRGBColorSpace}else{renderer.outputEncoding=THREE.sRGBEncoding}
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
+  (function(){
+    var c=document.createElement('canvas');c.width=32;c.height=256;var g=c.getContext('2d');
+    var gr=g.createLinearGradient(0,0,0,256);
+    gr.addColorStop(0,'#6a6e78');gr.addColorStop(0.42,'#141014');gr.addColorStop(0.48,'#9aa0aa');
+    gr.addColorStop(0.54,'#0e0a0c');gr.addColorStop(0.8,'#1a0608');gr.addColorStop(1,'#070506');
+    g.fillStyle=gr;g.fillRect(0,0,32,256);
+    g.fillStyle='rgba(230,57,70,0.5)';g.fillRect(0,150,32,8);
+    g.fillStyle='rgba(220,225,235,0.85)';g.fillRect(0,96,32,10);
+    var tex=new THREE.CanvasTexture(c);tex.mapping=THREE.EquirectangularReflectionMapping;
+    var pm=new THREE.PMREMGenerator(renderer);pm.compileEquirectangularShader();
+    scene.environment=pm.fromEquirectangular(tex).texture;tex.dispose();pm.dispose();
+  })();
   var camera=new THREE.PerspectiveCamera(45,W/H,0.1,200);
   camera.position.set(0,2,16);
   camera.lookAt(0,0,0);
@@ -721,7 +735,7 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener
   var state={
     camX:0,camY:2,camZ:16,
     lookX:0,lookY:0,lookZ:0,
-    needleY:8,needleX:0,needleZ:2,
+    needleY:4.5,needleX:0,needleZ:2,
     inkProgress:0,
     bgTopR:0.110,bgTopG:0.024,bgTopB:0.031,    // 0x1C0608
     bgBotR:0.031,bgBotG:0.031,bgBotB:0.031     // 0x080808
