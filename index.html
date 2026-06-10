@@ -294,6 +294,10 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:2.2rem
   .form-row{grid-template-columns:1fr}
 }
 </style>
+<style>/* native scroll: gallery un-pinned, swipe strip */
+.gallery-pin{position:relative!important;height:auto!important;overflow:visible!important;padding:3.5rem 0}
+.gallery-track{overflow-x:auto;-webkit-overflow-scrolling:touch}
+</style>
 </head>
 <body>
 <div class="scroll-bar" id="scrollBar"></div>
@@ -891,7 +895,8 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener
 <!-- Gallery: horizontal pinned scroll with dynamic sizing -->
 <script>
 (function(){
-  if(window.innerWidth<=900||!window.gsap||!window.ScrollTrigger)return;
+  if(true){/* native scroll: gallery un-pinned */}else if(window.innerWidth<=900||!window.gsap||!window.ScrollTrigger){}
+  if(true||window.innerWidth<=900||!window.gsap||!window.ScrollTrigger)return;
   var track=document.getElementById('galleryTrack');
   var section=document.querySelector('.gallery-section');
   if(!track||!section)return;
